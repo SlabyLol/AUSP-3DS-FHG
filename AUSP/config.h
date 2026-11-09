@@ -2,7 +2,7 @@
 #define AUSP_CONFIG_H
 
 #define AUSP_VERSION_MAJOR      1
-#define AUSP_VERSION_MINOR      2
+#define AUSP_VERSION_MINOR      3
 #define AUSP_VERSION_PATCH      0
 
 #define AUSP_REACTION_SCREEN    1
@@ -30,5 +30,13 @@
 
 #define AUSP_SCREEN_TOP         1
 #define AUSP_SCREEN_BOTTOM      0
+
+#define AUSP_SPLASH_ENABLE      1
+#define AUSP_SPLASH_DURATION    90
+
+#define AUSP_SPLASH_BG          C2D_Color32(12, 14, 28, 255)
+#define AUSP_SPLASH_ACCENT      C2D_Color32(0, 180, 255, 255)
+#define AUSP_SPLASH_TEXT        C2D_Color32(240, 245, 255, 255)
+#define AUSP_SPLASH_SUB         C2D_Color32(160, 180, 220, 255)
 
 #endif
