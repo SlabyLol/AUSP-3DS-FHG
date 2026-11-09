@@ -1,6 +1,6 @@
 # AUSP-3DS
 
-**Anti-USP-3DS** – Advanced lightweight plugin detection for Nintendo 3DS homebrew.
+**Anti-USP-3DS** – Advanced lightweight plugin detection for Nintendo 3DS homebrew. (USP stands for Unsigned-Plugin)
 
 Detects NTR, 3GX, CTRPluginFramework and related loaders **without any filesystem access** by scanning process memory for known signatures. Shows a fully customizable anti-cheat screen and can force-exit the process.
 
