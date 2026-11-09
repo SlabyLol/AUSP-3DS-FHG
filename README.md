@@ -1,17 +1,23 @@
 # AUSP-3DS
 
-**Anti-USP-3DS** – Advanced lightweight plugin detection for Nintendo 3DS homebrew. (USP stands for Unsigned-Plugin)
+**Anti-USP-3DS** – Advanced lightweight plugin detection for Nintendo 3DS homebrew.
 
-Detects NTR, 3GX, CTRPluginFramework and related loaders **without any filesystem access** by scanning process memory for known signatures. Shows a fully customizable anti-cheat screen and can force-exit the process.
+Detects NTR, 3GX, CTRPluginFramework and related loaders **without any filesystem access** by scanning process memory for known signatures.
+
+Fully configurable reaction:
+- Show anti-cheat screen
+- Call a custom action / callback
+- Or both
 
 ## Features
 
 - Memory-only detection (no SD card / folder checks)
-- Multiple known signatures for NTR, CTRPF, 3GX, PLG headers
 - Dynamic memory region discovery via `svcQueryMemory`
-- Fully customizable screen text and behavior via `config.h`
+- Multiple known signatures
+- Configurable reaction: screen only / action only / both
+- Fully customizable screen text
 - Clean modular design
-- Drop-in ready (just copy the `AUSP` folder)
+- Drop-in ready
 
 ## Installation
 
@@ -24,43 +30,53 @@ Detects NTR, 3GX, CTRPluginFramework and related loaders **without any filesyste
 include AUSP/Makefile.inc
 ```
 
-or manually:
-
-```makefile
-SOURCES += AUSP
-INCLUDES += AUSP
-```
-
 5. In your code (as early as possible):
 
 ```c
 #include "AUSP/anti_usp.h"
 
+// Optional: set your own action
+void my_punish(void)
+{
+    // e.g. corrupt save, softlock, send online ban signal, etc.
+    svcExitProcess();
+}
+
 int main(int argc, char **argv)
 {
-    // your init code...
-
+    anti_usp_set_action(my_punish);   // optional
     anti_usp_run();
 
     // rest of your game
 }
 ```
 
-## Customization
+## Configuration (`AUSP/config.h`)
 
-Edit **`AUSP/config.h`** to change every text string, whether the process should exit, and detection sensitivity.
+You can choose the reaction mode:
+
+```c
+#define AUSP_REACTION_MODE   AUSP_REACTION_BOTH   // or SCREEN / ACTION
+```
+
+Available modes:
+- `AUSP_REACTION_SCREEN`  → only show the anti-cheat screen
+- `AUSP_REACTION_ACTION`  → only call the registered action
+- `AUSP_REACTION_BOTH`    → show screen **and** call the action
+
+All text strings and force-exit behavior are also configurable there.
 
 ## Files
 
 | File | Purpose |
 |------|---------|
 | `anti_usp.h` / `anti_usp.c` | Main API |
-| `config.h` | All user-editable settings |
+| `config.h` | All settings + reaction mode |
 | `signatures.h` | Signature database |
 | `scanner.c` / `scanner.h` | Memory scanning engine |
-| `screen.c` / `screen.h` | Anti-cheat screen renderer |
+| `screen.c` / `screen.h` | Anti-cheat screen |
 | `Makefile.inc` | Easy Makefile integration |
-| `example_usage.c` | Minimal integration example |
+| `example_usage.c` | Full example |
 
 ## License
 

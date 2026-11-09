@@ -7,12 +7,10 @@ void ausp_draw_screen(void)
 {
     gfxInitDefault();
 
-    if (AUSP_SCREEN_TOP) {
+    if (AUSP_SCREEN_TOP)
         consoleInit(GFX_TOP, NULL);
-    }
-    if (AUSP_SCREEN_BOTTOM) {
+    if (AUSP_SCREEN_BOTTOM)
         consoleInit(GFX_BOTTOM, NULL);
-    }
 
     printf("\x1b[2;1H");
     printf("  ========================================\n");
@@ -32,9 +30,8 @@ void ausp_draw_screen(void)
         hidScanInput();
         u32 kDown = hidKeysDown();
 
-        if (AUSP_EXIT_ON_KEY && kDown) {
+        if (AUSP_EXIT_ON_KEY && kDown)
             break;
-        }
 
         gfxFlushBuffers();
         gfxSwapBuffers();

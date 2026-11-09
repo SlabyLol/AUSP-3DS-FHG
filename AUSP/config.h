@@ -2,8 +2,14 @@
 #define AUSP_CONFIG_H
 
 #define AUSP_VERSION_MAJOR      1
-#define AUSP_VERSION_MINOR      1
+#define AUSP_VERSION_MINOR      2
 #define AUSP_VERSION_PATCH      0
+
+#define AUSP_REACTION_SCREEN    1
+#define AUSP_REACTION_ACTION    2
+#define AUSP_REACTION_BOTH      3
+
+#define AUSP_REACTION_MODE      AUSP_REACTION_BOTH
 
 #define AUSP_TITLE              "ANTI-USP-3DS"
 #define AUSP_SUBTITLE           "PLUGIN DETECTED"
@@ -19,7 +25,8 @@
 
 #define AUSP_SCAN_CODE          1
 #define AUSP_SCAN_DATA          1
-#define AUSP_MAX_REGIONS        32
+#define AUSP_MAX_REGIONS        48
+#define AUSP_MIN_REGION_SIZE    0x1000
 
 #define AUSP_SCREEN_TOP         1
 #define AUSP_SCREEN_BOTTOM      0

@@ -4,10 +4,11 @@
 
 static bool region_contains(const u8 *base, u32 size, const u8 *sig, u32 siglen)
 {
-    if (!base || size < siglen || !sig) return false;
+    if (!base || size < siglen || !sig || siglen == 0) return false;
 
-    for (u32 i = 0; i <= size - siglen; i++) {
-        if (memcmp(base + i, sig, siglen) == 0)
+    const u8 *end = base + size - siglen;
+    for (const u8 *p = base; p <= end; p++) {
+        if (memcmp(p, sig, siglen) == 0)
             return true;
     }
     return false;
@@ -23,15 +24,19 @@ static int collect_regions(AuspMemRegion *out, int max)
     while (count < max && addr < 0x40000000) {
         Result res = svcQueryMemory(&info, &page, addr);
         if (R_FAILED(res)) break;
-
         if (info.size == 0) break;
 
         bool interesting = false;
 
-        if (AUSP_SCAN_CODE && (info.perm & MEMPERM_EXECUTE)) interesting = true;
-        if (AUSP_SCAN_DATA && (info.perm & MEMPERM_READ) && !(info.perm & MEMPERM_EXECUTE)) interesting = true;
+        if (AUSP_SCAN_CODE && (info.perm & MEMPERM_EXECUTE))
+            interesting = true;
+        if (AUSP_SCAN_DATA && (info.perm & MEMPERM_READ) && !(info.perm & MEMPERM_EXECUTE))
+            interesting = true;
 
-        if (interesting && info.state == MEMSTATE_CODE && info.size >= 0x1000) {
+        if (interesting &&
+            info.size >= AUSP_MIN_REGION_SIZE &&
+            (info.state == MEMSTATE_CODE || info.state == MEMSTATE_PRIVATE || info.state == MEMSTATE_SHARED))
+        {
             out[count].base  = info.base_addr;
             out[count].size  = info.size;
             out[count].state = info.state;
@@ -39,8 +44,9 @@ static int collect_regions(AuspMemRegion *out, int max)
             count++;
         }
 
-        if (info.base_addr + info.size <= addr) break;
-        addr = info.base_addr + info.size;
+        u32 next = info.base_addr + info.size;
+        if (next <= addr) break;
+        addr = next;
     }
 
     return count;
@@ -56,7 +62,10 @@ int ausp_scan_process(void)
         u32 size = regions[i].size;
 
         for (u32 s = 0; s < AUSP_SIGNATURE_COUNT; s++) {
-            if (region_contains(base, size, ausp_signatures[s].data, ausp_signatures[s].length)) {
+            if (region_contains(base, size,
+                                ausp_signatures[s].data,
+                                ausp_signatures[s].length))
+            {
                 return 1;
             }
         }

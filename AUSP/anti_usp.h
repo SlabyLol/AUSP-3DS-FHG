@@ -13,6 +13,10 @@ typedef enum {
     AUSP_ERROR = -1
 } AuspResult;
 
+typedef void (*AuspActionFn)(void);
+
+void anti_usp_set_action(AuspActionFn fn);
+
 AuspResult anti_usp_check(void);
 void anti_usp_show_screen(void);
 void anti_usp_run(void);
