@@ -1,36 +1,67 @@
 # AUSP-3DS
 
-Anti-USP-3DS – Lightweight plugin detection for Nintendo 3DS homebrew without filesystem access.
+**Anti-USP-3DS** – Advanced lightweight plugin detection for Nintendo 3DS homebrew.
 
-Detects common NTR / 3GX / CTRPluginFramework signatures in memory and shows a fully customizable anti-cheat screen.
+Detects NTR, 3GX, CTRPluginFramework and related loaders **without any filesystem access** by scanning process memory for known signatures. Shows a fully customizable anti-cheat screen and can force-exit the process.
+
+## Features
+
+- Memory-only detection (no SD card / folder checks)
+- Multiple known signatures for NTR, CTRPF, 3GX, PLG headers
+- Dynamic memory region discovery via `svcQueryMemory`
+- Fully customizable screen text and behavior via `config.h`
+- Clean modular design
+- Drop-in ready (just copy the `AUSP` folder)
 
 ## Installation
 
-1. Download the repository as ZIP.
-2. Extract the ZIP.
-3. Copy the entire `AUSP` folder into the `source` (or `src`) directory of your 3DS project.
-4. Add the following to your Makefile (adjust paths if needed):
+1. Download this repository as ZIP
+2. Extract it
+3. Copy the entire **`AUSP`** folder into your project's `source` or `src` directory
+4. Add to your Makefile:
+
+```makefile
+include AUSP/Makefile.inc
+```
+
+or manually:
 
 ```makefile
 SOURCES += AUSP
 INCLUDES += AUSP
 ```
 
-Or simply include the files manually in your build.
-
-5. In your main code call once early:
+5. In your code (as early as possible):
 
 ```c
 #include "AUSP/anti_usp.h"
 
-// ...
-anti_usp_run();
+int main(int argc, char **argv)
+{
+    // your init code...
+
+    anti_usp_run();
+
+    // rest of your game
+}
 ```
 
 ## Customization
 
-Edit `AUSP/config.h` to change the screen text, colors and behavior.
+Edit **`AUSP/config.h`** to change every text string, whether the process should exit, and detection sensitivity.
+
+## Files
+
+| File | Purpose |
+|------|---------|
+| `anti_usp.h` / `anti_usp.c` | Main API |
+| `config.h` | All user-editable settings |
+| `signatures.h` | Signature database |
+| `scanner.c` / `scanner.h` | Memory scanning engine |
+| `screen.c` / `screen.h` | Anti-cheat screen renderer |
+| `Makefile.inc` | Easy Makefile integration |
+| `example_usage.c` | Minimal integration example |
 
 ## License
 
-Public domain / use freely.
+Public domain. Do whatever you want.

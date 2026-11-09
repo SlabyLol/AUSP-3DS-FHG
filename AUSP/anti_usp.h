@@ -17,6 +17,8 @@ AuspResult anti_usp_check(void);
 void anti_usp_show_screen(void);
 void anti_usp_run(void);
 
+const char *anti_usp_version(void);
+
 #ifdef __cplusplus
 }
 #endif
