@@ -28,12 +28,9 @@ Fully configurable reaction after detection:
 
 1. Download this repository as ZIP
 2. Extract it
-3. Copy the entire **`AUSP`** folder into your project's `source` (or `src`) directory  
-   → Result should look like: `source/AUSP/anti_usp.c` etc.
-
-4. **Do NOT use `include AUSP/Makefile.inc`** if you get Makefile errors.
-
-   Instead open your project's `Makefile` and add these three lines **in the variables section** (where `SOURCES`, `INCLUDES` and `LIBS` are already defined):
+3. Copy the entire **`AUSP`** folder into your project  
+   - Either into `source/` **or** into the project root (both work)
+4. Open your `Makefile` and add these lines in the **variables section** (before any rules):
 
 ```makefile
 SOURCES  += AUSP
@@ -41,7 +38,7 @@ INCLUDES += AUSP
 LIBS     += -lcitro2d -lcitro3d
 ```
 
-   Make sure these lines are **not** indented with tabs and are placed **before** any rules (`build:`, `3dsx:`, etc.).
+   Do **not** use `include AUSP/Makefile.inc` if you get Makefile errors.
 
 5. In your code (as early as possible):
 
@@ -50,34 +47,30 @@ LIBS     += -lcitro2d -lcitro3d
 
 int main(int argc, char **argv)
 {
-    anti_usp_run();   // shows splash + does detection (ignores Nimbus)
+    anti_usp_run();
 
     // rest of your game
 }
 ```
 
-   Note: Because `INCLUDES += AUSP` is used, include the header as `"anti_usp.h"` (not `"AUSP/anti_usp.h"`).
+### Common errors & fixes
 
-### Common Makefile / compile errors & fixes
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| `*** missing separator` | Recipe line starts with spaces instead of a real Tab | Use a real Tab character for recipe lines |
-| `overriding recipe for target 'build'` | `include` placed in wrong location | Remove the include and add the 3 lines manually |
-| `C2D_Color32 undeclared` / citro2d errors | Old version of config.h | Update to latest AUSP (fixed in v1.4.2) |
-| `No rule to make target ... AUSP/...` | Folder not found | Make sure `AUSP` is inside your `source` folder |
-| `anti_usp.h: No such file` | Wrong include path | Use `#include "anti_usp.h"` with `INCLUDES += AUSP` |
+| Error | Fix |
+|-------|-----|
+| `ausp_signatures` / `AUSP_SIGNATURE_COUNT` undeclared | Update to latest AUSP (fixed in v1.4.3 – signatures moved to .c) |
+| `C2D_Color32 undeclared` | Update to latest AUSP |
+| `*** missing separator` | Recipe lines need a real Tab, not spaces |
+| `overriding recipe for target 'build'` | Remove any `include AUSP/Makefile.inc`, add the 3 lines manually |
+| `anti_usp.h: No such file` | Make sure `INCLUDES += AUSP` is set and use `#include "anti_usp.h"` |
 
 ## Configuration (`AUSP/config.h`)
 
 ```c
-#define AUSP_REACTION_MODE      AUSP_REACTION_BOTH   // SCREEN / ACTION / BOTH
-#define AUSP_IGNORE_NIMBUS      1                    // 1 = ignore Pretendo/Nimbus
+#define AUSP_REACTION_MODE      AUSP_REACTION_BOTH
+#define AUSP_IGNORE_NIMBUS      1
 #define AUSP_SPLASH_ENABLE      1
-#define AUSP_SPLASH_DURATION    90                   // frames
+#define AUSP_SPLASH_DURATION    90
 ```
-
-All anti-cheat texts, splash colors (as separate R/G/B/A values) and force-exit behavior are also editable there.
 
 ## License
 
