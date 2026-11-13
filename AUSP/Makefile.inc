@@ -7,6 +7,9 @@
 #   LIBS     += -lcitro2d -lcitro3d
 #
 # Place them in the variables section of your Makefile (before any rules).
+#
+# After adding INCLUDES += AUSP use:
+#   #include "anti_usp.h"
 
 SOURCES  += AUSP
 INCLUDES += AUSP

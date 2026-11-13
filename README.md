@@ -24,7 +24,7 @@ Fully configurable reaction after detection:
 - Fully customizable texts and colors
 - Drop-in ready
 
-## Installation (IMPORTANT – read carefully)
+## Installation (IMPORTANT)
 
 1. Download this repository as ZIP
 2. Extract it
@@ -46,7 +46,7 @@ LIBS     += -lcitro2d -lcitro3d
 5. In your code (as early as possible):
 
 ```c
-#include "AUSP/anti_usp.h"
+#include "anti_usp.h"
 
 int main(int argc, char **argv)
 {
@@ -56,13 +56,17 @@ int main(int argc, char **argv)
 }
 ```
 
-### Common Makefile errors & fixes
+   Note: Because `INCLUDES += AUSP` is used, include the header as `"anti_usp.h"` (not `"AUSP/anti_usp.h"`).
+
+### Common Makefile / compile errors & fixes
 
 | Error | Cause | Fix |
 |-------|-------|-----|
 | `*** missing separator` | Recipe line starts with spaces instead of a real Tab | Use a real Tab character for recipe lines |
-| `overriding recipe for target 'build'` | `include` placed in wrong location | Remove the include and add the 3 lines manually as shown above |
+| `overriding recipe for target 'build'` | `include` placed in wrong location | Remove the include and add the 3 lines manually |
+| `C2D_Color32 undeclared` / citro2d errors | Old version of config.h | Update to latest AUSP (fixed in v1.4.2) |
 | `No rule to make target ... AUSP/...` | Folder not found | Make sure `AUSP` is inside your `source` folder |
+| `anti_usp.h: No such file` | Wrong include path | Use `#include "anti_usp.h"` with `INCLUDES += AUSP` |
 
 ## Configuration (`AUSP/config.h`)
 
@@ -73,7 +77,7 @@ int main(int argc, char **argv)
 #define AUSP_SPLASH_DURATION    90                   // frames
 ```
 
-All anti-cheat texts, colors and force-exit behavior are also editable there.
+All anti-cheat texts, splash colors (as separate R/G/B/A values) and force-exit behavior are also editable there.
 
 ## License
 
